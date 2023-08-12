@@ -1,4 +1,4 @@
-# DjangoQuiz
+# DjangoQuiz - script Base edit sesuka hati
 
 error <module> just import 
 pip install modules
