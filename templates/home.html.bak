@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+            margin: 0px auto 0px auto;
+        }
+        a {
+            background-color: #ff0000;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            text-color: white;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        {% if user.is_authenticated %}
+            <!-- Content for authenticated users -->
+            <h1>Welcome, {{ user.username }}!</h1>
+            <p>You can now access the QuizApp.</p>
+            <!-- Place your authenticated user content here -->
+        {% else %}
+            <!-- Content for unauthenticated users -->
+            <h1>Welcome to the QuizApp!</h1>
+            <p>Please <a href="{% url 'login_attempt' %}">login</a> or <a href="{% url 'register_attempt' %}">register</a> to access the quizzes.</p>
+            <!-- Place your unauthenticated user content here -->
+        {% endif %}
+
+    <div class="container">
+        <h1 class="text-center">Select Course Name</h1>
+        <div class="row">
+            {% for courseName in course %}
+            <div class="col-lg-4">
+                <div class="card">
+                    <a href='/{{ courseName.id }}' class="btn btn-primary">{{ courseName.course_name }}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <nav class="nav">
+        <!-- Navigation menu -->
+        {% if user.is_authenticated %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'logout_view' %}">Logout</a></li>
+            </ul>
+        {% else %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'login_attempt' %}">Login</a></li>
+                <li><a href="{% url 'register_attempt' %}">Register</a></li>
+            </ul>
+        {% endif %}
+    </nav>
+       </div>
+</body>
+</html>

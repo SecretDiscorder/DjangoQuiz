@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .quiz-card {
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .option-label {
+        cursor: pointer;
+    }
+
+    .option-label:hover {
+        background-color: #f0f0f0;
+    }
+
+    .option-label.selected {
+        background-color: #2196F3;
+        color: white;
+    }
+</style>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+<div class="quiz-container">
+    <h1>Quiz Page</h1>
+    <h2>Quiz ID: {{ id }}</h2>
+
+    <form method="post" action="{% url 'quiz_submit' %}">
+        {% csrf_token %}
+        {% for question in questions %}
+        <div class="quiz-card">
+            <h3>{{ question.question }}</h3>
+            <ul>
+        <li><label class="radio-label"><input type="radio" name="question_{{ question.id }}" value="1">
+            <label class="option-label">{{ question.option_one }}</label></label></li>
+        <li><label class="radio-label"><input type="radio" name="question_{{ question.id }}" value="2">
+            <label class="option-label">{{ question.option_two }}</label></label></li>
+        <li><label class="radio-label"><input type="radio" name="question_{{ question.id }}" value="3">
+            <label class="option-label">{{ question.option_three }}</label></label></li>
+        <li><label class="radio-label"><input type="radio" name="question_{{ question.id }}" value="4">
+            <label class="option-label">{{ question.option_four }}</label></label></li>
+        <li><label class="radio-label"><input type="radio" name="question_{{ question.id }}" value="5">
+            <label class="option-label">{{ question.option_five }}</label></label></li>
+    </ul>
+            
+            <p class="timer" data-time="{{ question.time_limit.total_seconds }}">Remaining Time: {{ question.time_limit.total_seconds }} seconds</p>
+        </div>
+        {% endfor %}
+        <button class="button" type="submit">Submit</button>
+    </form>
+</div>
+<script>
+    const optionLabels = document.querySelectorAll('.option-label');
+
+    optionLabels.forEach(label => {
+        label.addEventListener('click', () => {
+            optionLabels.forEach(otherLabel => otherLabel.classList.remove('selected'));
+            label.classList.add('selected');
+        });
+    });
+// Countdown timer
+document.querySelectorAll('.timer').forEach(timer => {
+    const timeLimit = parseInt(timer.getAttribute('data-time'));
+    let timeRemaining = timeLimit;
+    
+    const interval = setInterval(() => {
+        if (timeRemaining > 0) {
+            timer.innerText = `Remaining Time: ${timeRemaining} seconds`;
+            timeRemaining--;
+        } else {
+            timer.innerText = "Time's up!";
+            clearInterval(interval);
+            const form = timer.closest('form');
+            form.submit(); // Automatically submit the form
+        }
+    }, 1000);
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Quiz App{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+<style>
+    .quiz-card {
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .option-label {
+        cursor: pointer;
+    }
+
+    .option-label:hover {
+        background-color: #f0f0f0;
+    }
+
+    .option-label.selected {
+        background-color: #2196F3;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <nav class="nav">
+        <!-- Navigation menu -->
+        {% if user.is_authenticated %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'logout_view' %}">Logout</a></li>
+            </ul>
+        {% else %}
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'login_attempt' %}">Login</a></li>
+                <li><a href="{% url 'register_attempt' %}">Register</a></li>
+            </ul>
+        {% endif %}
+    </nav>
+
+    <div class="card">
+        {% if user.is_authenticated %}
+            <!-- Content for authenticated users -->
+            <h1>Welcome, {{ user.username }}!</h1>
+            <p>You can now access the QuizApp.</p>
+            <!-- Place your authenticated user content here -->
+        {% else %}
+            <!-- Content for unauthenticated users -->
+            <h1>Welcome to the QuizApp!</h1>
+            <p>Please <a href="{% url 'login_attempt' %}">login</a> or <a href="{% url 'register_attempt' %}">register</a> to access the quizzes.</p>
+            <!-- Place your unauthenticated user content here -->
+        {% endif %}
+    </div>
+{% endblock %}
+</body>
+</html>
